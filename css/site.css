@@ -1,5 +1,5 @@
 :root {
-  --mdm-primary-color: #683d11;
+  --mdm-primary-color: #65390cb7;
   --mdm-dark-color: #202020;
   --mdm-light-color: #eafff7;
   --mdm-secondary-color: #e2c957;
@@ -19,8 +19,8 @@ body {
   border-radius: 10px; /* Rounded corners for a polished look */
   padding: 20px; /* Space inside the backdrop */
   margin: 10px auto; /* Center alignment */
-  width: auto; /* Adjust width as needed */
-  max-width: 100%; /* Responsive max width */
+  width: 100%; /* Adjust width as needed */
+  max-width: none; /* Responsive max width */
 }
 
 body {
