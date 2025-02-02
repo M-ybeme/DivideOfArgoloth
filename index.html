@@ -90,7 +90,12 @@
                 This is the land of Argaloth. The current year is 4963 AFC
                 (After the Forth Calamity)
               </p>
-              <img src="/images/ArgolothMapScale.png" class="img-fluid justify-content-center px-1" alt="Argaloth" />
+              <img src="/images/ArgolothUpdatedMapToScale.png" 
+                    class="img-fluid justify-content-center px-1" 
+                    alt="Argaloth" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#mapModal" 
+                    style="cursor: pointer;"/>
               <!-- Give a short explanation of what this site is about. -->
               <p class="text-light">
                 This site is dedicated to the world of Argaloth. Here you will find information on the world, its
@@ -119,6 +124,21 @@
       </div>
     </div>
   </main>
+
+  <!-- Bootstrap Modal -->
+  <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-dark" id="mapModalLabel">Argaloth Map</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img src="/images/ArgolothUpdatedMapToScale.png" class="img-fluid" alt="Argaloth Map"/>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer Section -->
   <footer class="footer mt-auto bg-dark text-light py-3">
