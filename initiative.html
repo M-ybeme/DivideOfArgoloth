@@ -152,14 +152,13 @@
             });
         }
 
-        document.getElementById('next-turn').addEventListener('click', () => {
-            currentTurn = (currentTurn + 1) % characters.length;
-            if (currentTurn === 0) combatRound++;
-            document.getElementById('combat-round').textContent = combatRound;
-            updateInitiativeTable();
+        document.getElementById('initiative-order').addEventListener('click', function (event) {
+            if (event.target.closest('.remove-character')) {
+                const index = parseInt(event.target.closest('.remove-character').dataset.index, 10);
+                characters.splice(index, 1);
+                updateInitiativeTable();
+            }
         });
-
-        document.getElementById('reset-turns').addEventListener('click', () => (currentTurn = 0, combatRound = 1, document.getElementById('combat-round').textContent = combatRound, updateInitiativeTable()));
     </script>
 </body>
 
