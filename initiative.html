@@ -97,7 +97,6 @@
                             <th scope="col">Initiative</th>
                             <th scope="col">Health</th>
                             <th scope="col">Notes</th>
-                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="initiative-order"></tbody>
@@ -130,12 +129,12 @@
             const notes = document.getElementById('character-notes').value;
 
             characters.push({ name, initiative, health, notes });
+            characters.sort((a, b) => b.initiative - a.initiative);
             updateInitiativeTable();
             document.getElementById('initiative-form').reset();
         });
 
         function updateInitiativeTable() {
-            characters.sort((a, b) => b.initiative - a.initiative);
             const tableBody = document.getElementById('initiative-order');
             tableBody.innerHTML = '';
 
@@ -147,18 +146,34 @@
                     <td>${char.initiative}</td>
                     <td><input type="number" class="form-control form-control-sm health-input" value="${char.health}" data-index="${index}"></td>
                     <td><input type="text" class="form-control form-control-sm notes-input" value="${char.notes}" data-index="${index}"></td>
-                    <td><button class="btn btn-sm btn-danger remove-character" data-index="${index}"><i class="bi bi-trash"></i></button></td>
                 `;
                 tableBody.appendChild(row);
             });
+
+            document.querySelectorAll('.health-input, .notes-input').forEach(input => {
+                input.addEventListener('input', function () {
+                    const index = this.dataset.index;
+                    if (this.classList.contains('health-input')) {
+                        characters[index].health = parseInt(this.value, 10);
+                    } else {
+                        characters[index].notes = this.value;
+                    }
+                });
+            });
         }
 
-        document.getElementById('initiative-order').addEventListener('click', function (event) {
-            if (event.target.closest('.remove-character')) {
-                const index = parseInt(event.target.closest('.remove-character').dataset.index, 10);
-                characters.splice(index, 1);
-                updateInitiativeTable();
-            }
+        document.getElementById('next-turn').addEventListener('click', () => {
+            currentTurn = (currentTurn + 1) % characters.length;
+            if (currentTurn === 0) combatRound++;
+            document.getElementById('combat-round').textContent = combatRound;
+            updateInitiativeTable();
+        });
+
+        document.getElementById('reset-turns').addEventListener('click', () => {
+            currentTurn = 0;
+            combatRound = 1;
+            document.getElementById('combat-round').textContent = combatRound;
+            updateInitiativeTable();
         });
     </script>
 </body>
