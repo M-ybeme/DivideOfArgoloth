@@ -1,273 +1,490 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
-    <title>The Divide of Argaloth: Initiative Tracker</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" />
-
-    <!-- Custom CSS -->
-    <link href="/css/site.css" rel="stylesheet" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/images/dndFavicon (2).png" />
-
-    <style>
-        .bg-orange {
-            background-color: #fd7e14 !important;
-            color: #212529 !important;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Divide of Argaloth: Initiative Tracker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css" />
+  <!-- Custom CSS -->
+  <link href="/css/site.css" rel="stylesheet" />
+  <!-- Dev Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/dndFavicon (2).png" />
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <style>
+    .bgimage{
+        background: url('images/BGMap.png') no-repeat center center fixed;
+        background-size: cover;}
+    .bg-orange { background-color: #fd7e14 !important; color: #212529 !important; }
+    .drag-handle { cursor: move; }
+    .active-turn {
+      border-left: 5px solid #1d9e6d !important;
+      color: #f8f9fa !important;
+      font-weight: bold;
+    }
+    #saveHistorySelect { min-width: 200px; }
+  </style>
 </head>
 <body class="bgimage">
-
-<!-- NAVBAR OMITTED FOR BREVITY -->
-
-<main class="content my-5 pt-5">
-    <div class="container-fluid text-center backdrop">
-        <h1 class="display-1 mb-0">Initiative Tracker</h1>
-        <p class="lead">Manage initiative, health, notes, and combat rounds.</p>
-
-        <form id="initiative-form" class="mb-4">
-            <div class="row g-2">
-                <div class="col-md-3"><input id="character-name" class="form-control" type="text" placeholder="Character Name" required></div>
-                <div class="col-md-2"><input id="initiative-roll" class="form-control" type="number" placeholder="Initiative" required></div>
-                <div class="col-md-2"><input id="character-health" class="form-control" type="number" placeholder="Max HP" required></div>
-                <div class="col-md-3"><input id="character-notes" class="form-control" type="text" placeholder="Notes (optional)"></div>
-                <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Add</button></div>
-            </div>
-        </form>
-
-        <h2>Combat Round: <span id="combat-round">1</span></h2>
-
-        <!-- Desktop Table View -->
-        <div class="d-none d-md-block">
-            <div class="table-responsive">
-                <table class="table table-striped text-light align-middle">
-                    <thead>
-                        <tr>
-                            <th>Turn</th>
-                            <th>Character</th>
-                            <th>Initiative</th>
-                            <th>Health</th>
-                            <th>Notes / Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="initiative-order"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Mobile Card View -->
-        <div id="mobile-initiative-order" class="d-block d-md-none"></div>
-
-        <div class="mt-3 d-flex gap-2 justify-content-center flex-wrap">
-            <button id="next-turn" class="btn btn-success">Next Turn</button>
-            <button id="reset-turns" class="btn btn-danger">Reset</button>
-            <button id="clear-all" class="btn btn-outline-danger">Clear All</button>
-            <button id="clear-storage" class="btn btn-outline-warning">Clear Saved Data</button>
-        </div>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top text-light" id="mainNav">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">
+        <img src="/images/dndFavicon (2).png" height="40" width="40" alt="App Logo" class="d-inline-block" />
+        The Divide of Argaloth
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon">
+          <i class="bi bi-list"></i>
+        </span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="index.html">Home</a>
+          </li>
+          <li class="nav-item"><a class="nav-link active" href="initiative.html">Initiative</a></li>
+          <li>
+            <a class="nav-link" aria-current="page" href="/resources.html">Resources</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="items.html">Items</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="sessionzerohandout.html">Session Zero Handout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="characters.html">Characters</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="coastalConflict.html">The Coastal Conflict</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              More
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" data-bs-theme="dark">
+              <li><a class="dropdown-item" href="anferdale.html">Anferdale</a></li>
+              <li><a class="dropdown-item" href="minotaurs.html">Minotaurs</a></li>
+              <li><a class="dropdown-item" href="aeloria.html">Aeloria</a></li>
+              <li><a class="dropdown-item" href="eladrin.html">Eladrin</a></li>
+              <li><a class="dropdown-item" href="music.html">Music</a></li>
+              <li><a class="dropdown-item" href="elderIsles.html">The Elder Isles</a></li>
+              <li><a class="dropdown-item" href="forgehill.html">Forgehill</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
-</main>
+  </nav>
+  <main class="content pt-3">
+    <div class="container-fluid text-center backdrop">
+      <h1 class="display-1 mb-0">Initiative Tracker</h1>
+      <p class="lead">Manage initiative, health, AC, notes, dice rolls, and combat rounds.</p>
+      <div class="d-flex justify-content-center align-items-center gap-3 my-3 flex-wrap">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="autoSaveToggle" checked>
+          <label class="form-check-label" for="autoSaveToggle">Auto-Save</label>
+        </div>
+        <button id="manualSaveBtn" class="btn btn-outline-secondary btn-sm">Manual Save</button>
+        <select id="saveHistorySelect" class="form-select form-select-sm w-auto">
+          <option disabled selected>Load Previous Save</option>
+        </select>
+      </div>
 
-<!-- Status Modal -->
-<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-dark text-light">
-      <div class="modal-header">
-        <h5 class="modal-title" id="statusModalLabel">Edit Status Effects</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      <form id="initiative-form" class="mb-4">
+        <div class="row g-2">
+          <div class="col-md-3"><input id="character-name" class="form-control" type="text" placeholder="Character Name" required></div>
+          <div class="col-md-2"><input id="initiative-roll" class="form-control" type="number" placeholder="Initiative" required></div>
+          <div class="col-md-2"><input id="character-health" class="form-control" type="number" placeholder="Max HP" required></div>
+          <div class="col-md-2"><input id="character-ac" class="form-control" type="number" placeholder="AC" required></div>
+          <div class="col-md-2"><input id="character-notes" class="form-control" type="text" placeholder="Notes (optional)"></div>
+          <div class="col-md-1"><button class="btn btn-primary w-100" type="submit">Add</button></div>
+        </div>
+      </form>
+
+      <h2>Combat Round: <span id="combat-round">1</span></h2>
+
+      <!-- Dice Roller Section -->
+      <div class="my-4 text-light">
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+          <button class="btn btn-secondary dice-btn" data-dice="4">Roll d4</button>
+          <button class="btn btn-secondary dice-btn" data-dice="6">Roll d6</button>
+          <button class="btn btn-secondary dice-btn" data-dice="8">Roll d8</button>
+          <button class="btn btn-secondary dice-btn" data-dice="10">Roll d10</button>
+          <button class="btn btn-secondary dice-btn" data-dice="12">Roll d12</button>
+          <button class="btn btn-secondary dice-btn" data-dice="20">Roll d20</button>
+          <button class="btn btn-secondary dice-btn" data-dice="100">Roll d100</button>
+        </div>
+        <div class="mt-3">
+          <label for="custom-dice-input" class="form-label">Custom Roll:</label>
+          <div class="input-group w-auto mx-auto">
+            <input id="custom-dice-input" type="text" class="form-control form-control-sm" placeholder="e.g. 2d6+3">
+            <button id="roll-custom-dice" class="btn btn-warning btn-sm">Roll</button>
+          </div>
+        </div>
+        <div class="text-light mt-2" id="dice-result" style="font-size: 1.25rem;"></div>
+        <div class="mt-3">
+          <button class="btn btn-outline-light btn-sm" data-bs-toggle="collapse" data-bs-target="#dice-history">Toggle Roll History</button>
+          <button class="btn btn-outline-danger btn-sm" id="clear-dice-history">Clear Dice History</button>
+          <div class="collapse mt-2" id="dice-history">
+            <div class="card card-body bg-dark text-light" id="dice-history-log" style="max-height: 200px; overflow-y: auto;"></div>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <div id="status-badges" class="mb-3 d-flex flex-wrap gap-2"></div>
-        <input type="text" id="new-status-input" class="form-control" placeholder="Enter new effect">
+
+      <!-- Initiative Table -->
+      <div class="d-none d-md-block">
+        <div class="table-responsive">
+          <table class="table table-striped text-light align-middle">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Turn</th>
+                <th>Character</th>
+                <th>Initiative</th>
+                <th>AC</th>
+                <th>Health</th>
+                <th>Notes</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="initiative-order"></tbody>
+          </table>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="save-status-btn">Save</button>
+
+      <div id="mobile-initiative-order" class="d-block d-md-none"></div>
+
+      <div class="mt-3 d-flex gap-2 justify-content-center flex-wrap">
+        <button id="next-turn" class="btn btn-success">Next Turn</button>
+        <button id="reset-turns" class="btn btn-danger">Reset Rounds</button>
+        <button id="clear-all" class="btn btn-outline-danger">Clear All</button>
+        <button id="clear-storage" class="btn btn-outline-warning">Clear Saved Data</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Status Modal -->
+  <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark text-light">
+        <div class="modal-header">
+          <h5 class="modal-title" id="statusModalLabel">Edit Status Effects</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="status-badges" class="mb-3 d-flex flex-wrap gap-2"></div>
+          <input type="text" id="new-status-input" class="form-control mb-2" placeholder="Add new effect..." />
+          <button type="button" class="btn btn-primary w-100" id="add-status-effect">Add Effect</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let characters = [];
+      let currentTurn = 0;
+      let combatRound = 1;
+      let modalCharacterIndex = null;
+      let autoSaveEnabled = true;
+      let diceHistory = [];
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-let characters = [];
-let currentTurn = 0;
-let combatRound = 1;
-let modalCharacterIndex = null;
-const modal = new bootstrap.Modal(document.getElementById('statusModal'));
+      const statusModal = new bootstrap.Modal(document.getElementById('statusModal'));
 
-function hpClass(percent) {
-    if (percent <= 0) return 'bg-secondary text-light text-decoration-line-through';
-    if (percent <= 25) return 'bg-danger text-light';
-    if (percent <= 50) return 'bg-warning text-dark';
-    if (percent <= 75) return 'bg-orange text-dark';
-    return 'bg-success text-light';
-}
+      const saved = localStorage.getItem('initiativeTrackerData');
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          characters = data.characters || [];
+          currentTurn = data.currentTurn || 0;
+          combatRound = data.combatRound || 1;
+          diceHistory = Array.isArray(data.diceHistory) && typeof data.diceHistory[0] === 'object'
+            ? data.diceHistory
+            : (data.diceHistory || []).map(t => ({ text: t, timestamp: 'Unknown' }));
+        } catch (e) {
+          console.warn("Failed to load tracker state:", e);
+        }
+      }
 
-const saved = localStorage.getItem('initiativeTrackerData');
-if (saved) {
-    try {
-        const data = JSON.parse(saved);
-        characters = data.characters || [];
-        currentTurn = data.currentTurn || 0;
-        combatRound = data.combatRound || 1;
-    } catch (e) {
-        console.warn("Failed to load saved tracker state:", e);
-    }
-}
+      function hpClass(percent) {
+        if (percent <= 0) return 'bg-secondary text-light text-decoration-line-through';
+        if (percent <= 25) return 'bg-danger text-light';
+        if (percent <= 50) return 'bg-warning text-dark';
+        if (percent <= 75) return 'bg-orange text-dark';
+        return 'bg-success text-light';
+      }
 
-function buildTable() {
-    document.getElementById('combat-round').textContent = combatRound;
-    const tableBody = document.getElementById('initiative-order');
-    const mobileBody = document.getElementById('mobile-initiative-order');
-    tableBody.innerHTML = '';
-    mobileBody.innerHTML = '';
+      function saveToLocalStorage(manual = false) {
+        const timestamp = new Date().toISOString();
+        const state = { characters, currentTurn, combatRound, diceHistory };
+        const key = manual ? `initiativeTrackerData_${timestamp}` : 'initiativeTrackerData';
+        localStorage.setItem(key, JSON.stringify(state));
+        if (manual) updateSaveHistory();
+      }
 
-    characters.forEach((c, i) => {
-        const pct = Math.round((c.currentHP / c.maxHP) * 100);
+      function updateSaveHistory() {
+        const select = document.getElementById('saveHistorySelect');
+        select.innerHTML = `<option disabled selected>Load Previous Save</option>`;
+        Object.keys(localStorage)
+          .filter(k => k.startsWith('initiativeTrackerData_'))
+          .sort().reverse()
+          .forEach(key => {
+            const time = key.replace('initiativeTrackerData_', '');
+            const label = new Date(time).toLocaleString();
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = label;
+            select.appendChild(opt);
+          });
+      }
 
-        // Desktop Table Row
-        const row = document.createElement('tr');
-        if (i === currentTurn) row.classList.add('table-success');
-        row.innerHTML = `
+      function addToHistory(text) {
+        const timestamp = new Date().toLocaleTimeString();
+        diceHistory.unshift({ text, timestamp });
+        buildDiceHistory();
+        if (autoSaveEnabled) saveToLocalStorage();
+      }
+
+      function buildDiceHistory() {
+        const history = document.getElementById('dice-history-log');
+        history.innerHTML = '';
+        diceHistory.forEach(entry => {
+          const div = document.createElement('div');
+          div.className = "border-bottom pb-1 mb-1";
+          div.innerHTML = `<strong>${entry.timestamp}</strong>: ${entry.text}`;
+          history.appendChild(div);
+        });
+      }
+
+      function buildTable() {
+        document.getElementById('combat-round').textContent = combatRound;
+        const tableBody = document.getElementById('initiative-order');
+        const mobileBody = document.getElementById('mobile-initiative-order');
+        tableBody.innerHTML = '';
+        mobileBody.innerHTML = '';
+
+        characters.forEach((c, i) => {
+          const pct = Math.round((c.currentHP / c.maxHP) * 100);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="drag-handle"><i class="bi bi-grip-vertical"></i></td>
             <td>${i === currentTurn ? '<i class="bi bi-caret-right-fill"></i>' : ''}</td>
             <td class="${pct <= 0 ? 'text-decoration-line-through' : ''}">${c.name}</td>
             <td>${c.initiative}</td>
+            <td>${c.ac ?? '-'}</td>
             <td><input type="number" class="form-control form-control-sm health-input ${hpClass(pct)}" value="${c.currentHP}" data-index="${i}"></td>
-            <td>
-                <input type="text" class="form-control form-control-sm notes-input mb-2" value="${c.notes}" data-index="${i}">
-                <button class="btn btn-sm btn-outline-info w-100 status-btn" data-index="${i}" data-bs-toggle="tooltip" title="${c.status.length ? c.status.join(', ') : 'No active effects'}">Status</button>
-            </td>
+            <td><input type="text" class="form-control form-control-sm notes-input" placeholder="Notes..." value="${c.notes}" data-index="${i}"></td>
+            <td><button class="btn btn-sm btn-outline-info w-100 status-btn" data-index="${i}" title="${c.status?.join(', ') || 'No active effects'}">Status</button></td>
             <td><button class="btn btn-sm btn-outline-danger delete-btn" data-index="${i}"><i class="bi bi-trash"></i></button></td>
-        `;
-        tableBody.appendChild(row);
+          `;
+          if (i === currentTurn) row.classList.add('active-turn');
+          tableBody.appendChild(row);
 
-        // Mobile Card View
-        const card = document.createElement('div');
-        card.className = 'card mb-2 text-start';
-        if (i === currentTurn) card.classList.add('border-success');
-        card.innerHTML = `
+          const card = document.createElement('div');
+          card.className = 'card mb-2 text-start';
+          if (i === currentTurn) card.classList.add('border-success');
+          card.innerHTML = `
             <div class="card-body">
-                <h5 class="card-title mb-1">${c.name} <small class="text-muted">(${c.initiative} Init)</small></h5>
-                <p class="mb-1">HP: <input type="number" class="form-control form-control-sm health-input ${hpClass(pct)}" value="${c.currentHP}" data-index="${i}"></p>
-                <p class="mb-1">Notes: <input type="text" class="form-control form-control-sm notes-input" value="${c.notes}" data-index="${i}"></p>
-                <p class="mb-1">Status: <button class="btn btn-sm btn-outline-info status-btn" data-index="${i}" data-bs-toggle="tooltip" title="${c.status.length ? c.status.join(', ') : 'No active effects'}">Status</button></p>
-                <button class="btn btn-sm btn-outline-danger delete-btn" data-index="${i}"><i class="bi bi-trash"></i> Remove</button>
+              <h5 class="card-title mb-1">${c.name} <small class="text-muted">(${c.initiative} Init)</small></h5>
+              <p class="mb-1">AC: ${c.ac ?? '-'}</p>
+              <p class="mb-1">HP: <input type="number" class="form-control form-control-sm health-input ${hpClass(pct)}" value="${c.currentHP}" data-index="${i}"></p>
+              <p class="mb-1">Notes: <input type="text" class="form-control form-control-sm notes-input" placeholder="Notes..." value="${c.notes}" data-index="${i}"></p>
+              <p class="mb-1">Status: <button class="btn btn-sm btn-outline-info status-btn" data-index="${i}" title="${c.status?.join(', ') || 'No active effects'}">Status</button></p>
+              <button class="btn btn-sm btn-outline-danger delete-btn" data-index="${i}"><i class="bi bi-trash"></i> Remove</button>
             </div>
-        `;
-        mobileBody.appendChild(card);
-    });
+          `;
+          mobileBody.appendChild(card);
+        });
 
-    document.querySelectorAll('.health-input').forEach(inp => inp.addEventListener('input', function () {
-        const idx = parseInt(this.dataset.index);
-        characters[idx].currentHP = isNaN(this.value) ? 0 : parseInt(this.value);
-        buildTable();
-    }));
+        document.querySelectorAll('.health-input').forEach(inp => inp.addEventListener('input', function () {
+          const idx = parseInt(this.dataset.index);
+          characters[idx].currentHP = isNaN(this.value) ? 0 : parseInt(this.value);
+          buildTable();
+        }));
 
-    document.querySelectorAll('.notes-input').forEach(inp => inp.addEventListener('input', function () {
-        characters[this.dataset.index].notes = this.value;
-    }));
+        document.querySelectorAll('.notes-input').forEach(inp => inp.addEventListener('input', function () {
+          characters[this.dataset.index].notes = this.value;
+        }));
 
-    document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', () => deleteChar(btn.dataset.index)));
+        document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', () => deleteChar(btn.dataset.index)));
 
-    document.querySelectorAll('.status-btn').forEach(btn => btn.addEventListener('click', function () {
-        modalCharacterIndex = parseInt(this.dataset.index);
-        const container = document.getElementById('status-badges');
-        const input = document.getElementById('new-status-input');
-        const char = characters[modalCharacterIndex];
+        document.querySelectorAll('.status-btn').forEach(btn => btn.addEventListener('click', function () {
+          modalCharacterIndex = parseInt(this.dataset.index);
+          const container = document.getElementById('status-badges');
+          const input = document.getElementById('new-status-input');
+          const char = characters[modalCharacterIndex];
 
-        input.value = '';
-        container.innerHTML = char.status.map(effect =>
+          input.value = '';
+          container.innerHTML = char.status.map(effect =>
             `<span class="badge bg-secondary px-2 py-1">
-                ${effect}
-                <i class="bi bi-x ms-1 remove-status" data-effect="${effect}" role="button"></i>
+              ${effect}
+              <i class="bi bi-x ms-1 remove-status" data-effect="${effect}" role="button"></i>
             </span>`).join('');
 
-        document.querySelectorAll('.remove-status').forEach(x => x.addEventListener('click', function () {
+          container.querySelectorAll('.remove-status').forEach(x => x.addEventListener('click', function () {
             const eff = this.dataset.effect;
             characters[modalCharacterIndex].status = characters[modalCharacterIndex].status.filter(s => s !== eff);
             this.parentElement.remove();
+          }));
+
+          statusModal.show();
         }));
 
-        modal.show();
-    }));
+        new Sortable(document.getElementById('initiative-order'), {
+          handle: '.drag-handle',
+          animation: 150,
+          onEnd: function (evt) {
+            const [movedItem] = characters.splice(evt.oldIndex, 1);
+            characters.splice(evt.newIndex, 0, movedItem);
+            buildTable();
+          }
+        });
 
-    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltips.forEach(t => new bootstrap.Tooltip(t));
-}
+        buildDiceHistory();
+        if (autoSaveEnabled) saveToLocalStorage();
+      }
 
-function deleteChar(idx) {
-    characters.splice(idx, 1);
-    if (currentTurn >= characters.length) currentTurn = 0;
-    if (characters.length === 0) combatRound = 1;
-    buildTable();
-}
+      function parseDiceFormula(formula) {
+        const match = formula.toLowerCase().match(/^(\d*)d(\d+)([+-]\d+)?$/);
+        if (!match) return null;
+        const num = parseInt(match[1] || '1', 10);
+        const sides = parseInt(match[2], 10);
+        const mod = parseInt(match[3] || '0', 10);
+        const rolls = Array.from({ length: num }, () => Math.floor(Math.random() * sides) + 1);
+        const total = rolls.reduce((a, b) => a + b, 0) + mod;
+        return { rolls, modifier: mod, total, sides, num };
+      }
 
-document.getElementById('initiative-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const name = document.getElementById('character-name').value.trim();
-    const init = parseInt(document.getElementById('initiative-roll').value, 10);
-    const maxHP = parseInt(document.getElementById('character-health').value, 10);
-    const notes = document.getElementById('character-notes').value.trim();
-    if (!name || isNaN(init) || isNaN(maxHP)) return;
+      function deleteChar(idx) {
+        characters.splice(idx, 1);
+        if (currentTurn >= characters.length) currentTurn = 0;
+        if (characters.length === 0) combatRound = 1;
+        buildTable();
+      }
 
-    characters.push({ name, initiative: init, currentHP: maxHP, maxHP, notes, status: [] });
-    characters.sort((a, b) => b.initiative - a.initiative);
-    e.target.reset();
-    buildTable();
-});
+      // Event Listeners
+      document.getElementById('initiative-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const name = document.getElementById('character-name').value.trim();
+        const init = parseInt(document.getElementById('initiative-roll').value, 10);
+        const maxHP = parseInt(document.getElementById('character-health').value, 10);
+        const ac = parseInt(document.getElementById('character-ac').value, 10);
+        const notes = document.getElementById('character-notes').value.trim();
+        if (!name || isNaN(init) || isNaN(maxHP) || isNaN(ac)) return;
 
-document.getElementById('clear-all').addEventListener('click', () => {
-    characters = []; currentTurn = 0; combatRound = 1;
-    buildTable();
-});
+        characters.push({ name, initiative: init, currentHP: maxHP, maxHP, notes, ac, status: [] });
+        characters.sort((a, b) => b.initiative - a.initiative);
+        e.target.reset();
+        buildTable();
+      });
 
-document.getElementById('clear-storage').addEventListener('click', () => {
-    localStorage.removeItem('initiativeTrackerData');
-    alert('Saved tracker data cleared.');
-});
+      document.getElementById('add-status-effect').addEventListener('click', function () {
+        const effect = document.getElementById('new-status-input').value.trim();
+        if (!effect || modalCharacterIndex === null) return;
 
-document.getElementById('next-turn').addEventListener('click', () => {
-    if (characters.length === 0) return;
-    currentTurn = (currentTurn + 1) % characters.length;
-    if (currentTurn === 0) combatRound++;
-    buildTable();
-});
+        const char = characters[modalCharacterIndex];
+        if (!char.status.includes(effect)) {
+          char.status.push(effect);
+        }
 
-document.getElementById('reset-turns').addEventListener('click', () => {
-    currentTurn = 0; combatRound = 1; buildTable();
-});
+        document.getElementById('new-status-input').value = '';
+        buildTable();
+        statusModal.hide();
+      });
 
-document.getElementById('save-status-btn').addEventListener('click', () => {
-    const input = document.getElementById('new-status-input');
-    const newEffect = input.value.trim();
-    if (newEffect && modalCharacterIndex !== null) {
-        const list = characters[modalCharacterIndex].status;
-        if (!list.includes(newEffect)) list.push(newEffect);
-    }
-    buildTable();
-    modal.hide();
-});
+      document.getElementById('clear-all').addEventListener('click', () => {
+        characters = [];
+        currentTurn = 0;
+        combatRound = 1;
+        buildTable();
+      });
 
-window.addEventListener('beforeunload', () => {
-    const state = {
-        characters,
-        currentTurn,
-        combatRound
-    };
-    localStorage.setItem('initiativeTrackerData', JSON.stringify(state));
-});
+      document.getElementById('clear-storage').addEventListener('click', () => {
+        localStorage.clear();
+        alert('All saved tracker data cleared.');
+        updateSaveHistory();
+      });
 
-buildTable();
-</script>
+      document.getElementById('next-turn').addEventListener('click', () => {
+        if (characters.length === 0) return;
+        currentTurn = (currentTurn + 1) % characters.length;
+        if (currentTurn === 0) combatRound++;
+        buildTable();
+      });
+
+      document.getElementById('reset-turns').addEventListener('click', () => {
+        currentTurn = 0;
+        combatRound = 1;
+        buildTable();
+      });
+
+      document.getElementById('manualSaveBtn').addEventListener('click', () => {
+        saveToLocalStorage(true);
+        alert('Manual save complete.');
+      });
+
+      document.getElementById('saveHistorySelect').addEventListener('change', function () {
+        const raw = localStorage.getItem(this.value);
+        if (!raw) return;
+        try {
+          const data = JSON.parse(raw);
+          characters = data.characters || [];
+          currentTurn = data.currentTurn || 0;
+          combatRound = data.combatRound || 1;
+          diceHistory = Array.isArray(data.diceHistory) && typeof data.diceHistory[0] === 'object'
+            ? data.diceHistory
+            : (data.diceHistory || []).map(t => ({ text: t, timestamp: 'Unknown' }));
+          buildTable();
+        } catch (e) {
+          alert('Failed to load that save.');
+        }
+      });
+
+      document.getElementById('autoSaveToggle').addEventListener('change', e => {
+        autoSaveEnabled = e.target.checked;
+      });
+
+      document.querySelectorAll('.dice-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const sides = parseInt(this.dataset.dice);
+          const result = Math.floor(Math.random() * sides) + 1;
+          const output = `🎲 Rolled d${sides}: ${result}`;
+          document.getElementById('dice-result').textContent = output;
+          addToHistory(output);
+        });
+      });
+
+      document.getElementById('roll-custom-dice').addEventListener('click', function () {
+        const input = document.getElementById('custom-dice-input').value.trim();
+        const parsed = parseDiceFormula(input);
+        if (!parsed) return alert("Invalid format. Use XdY+Z (e.g., 2d6+3)");
+        const { rolls, modifier, total, sides, num } = parsed;
+        const modStr = modifier !== 0 ? (modifier > 0 ? ` + ${modifier}` : ` - ${Math.abs(modifier)}`) : '';
+        const output = `🎲 Rolled ${num}d${sides}${modStr}: [${rolls.join(', ')}] = ${total}`;
+        document.getElementById('dice-result').textContent = output;
+        addToHistory(output);
+      });
+
+      document.getElementById('clear-dice-history').addEventListener('click', () => {
+        if (confirm("Clear all dice history?")) {
+          diceHistory = [];
+          buildDiceHistory();
+          if (autoSaveEnabled) saveToLocalStorage();
+        }
+      });
+
+      window.addEventListener('beforeunload', () => {
+        if (autoSaveEnabled) saveToLocalStorage();
+      });
+
+      updateSaveHistory();
+      buildTable();
+    });
+  </script>
 </body>
 </html>
