@@ -303,6 +303,34 @@
               <button class="btn btn-sm btn-outline-danger delete-btn" data-index="${i}"><i class="bi bi-trash"></i> Remove</button>
             </div>
           `;
+
+                // Reordering Buttons for Mobile
+          const upBtn = document.createElement('button');
+          upBtn.className = 'btn btn-sm btn-outline-light me-1';
+          upBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
+          upBtn.onclick = () => {
+            if (i > 0) {
+              [characters[i - 1], characters[i]] = [characters[i], characters[i - 1]];
+              buildTable();
+            }
+          };
+        
+          const downBtn = document.createElement('button');
+          downBtn.className = 'btn btn-sm btn-outline-light';
+          downBtn.innerHTML = '<i class="bi bi-arrow-down"></i>';
+          downBtn.onclick = () => {
+            if (i < characters.length - 1) {
+              [characters[i], characters[i + 1]] = [characters[i + 1], characters[i]];
+              buildTable();
+            }
+          };
+        
+          const reorderDiv = document.createElement('div');
+          reorderDiv.className = 'd-flex justify-content-end mt-2';
+          reorderDiv.appendChild(upBtn);
+          reorderDiv.appendChild(downBtn);
+          card.querySelector('.card-body').appendChild(reorderDiv);
+
           mobileBody.appendChild(card);
         });
 
@@ -339,7 +367,8 @@
 
           statusModal.show();
         }));
-
+        
+        // Initialize Sortable for drag-and-drop reordering
         new Sortable(document.getElementById('initiative-order'), {
           handle: '.drag-handle',
           animation: 150,
