@@ -87,15 +87,15 @@
           <input class="form-check-input" type="checkbox" id="autoSaveToggle" checked>
           <label class="form-check-label" for="autoSaveToggle">Auto-Save</label>
         </div>
-        <button id="manualSaveBtn" class="btn btn-primary">Manual Save</button>
+        <button id="manualSaveBtn" class="btn btn-outline-primary">Manual Save</button>
         <select id="saveHistorySelect" class="form-select form-select-sm w-auto">
           <option disabled selected>Load Previous Save</option>
         </select>
       </div>
       <div class="d-flex justify-content-center align-items-center gap-3 my-3 flex-wrap">
         <input type="file" id="import-file" accept=".json" class="d-none" />
-        <button id="export-btn" class="btn btn-warning">Export Session</button>
-        <button id="import-btn" class="btn btn-secondary">Import Session</button>
+        <button id="export-btn" class="btn btn-outline-warning">Export Session</button>
+        <button id="import-btn" class="btn btn-outline-secondary">Import Session</button>
       </div>
 
       <form id="initiative-form" class="mb-4">
@@ -105,7 +105,7 @@
           <div class="col-md-2"><input id="character-health" class="form-control" type="number" placeholder="Max HP" required></div>
           <div class="col-md-2"><input id="character-ac" class="form-control" type="number" placeholder="AC" required></div>
           <div class="col-md-2"><input id="character-notes" class="form-control" type="text" placeholder="Notes (optional)"></div>
-          <div class="col-md-1"><button class="btn btn-primary w-100" type="submit">Add</button></div>
+          <div class="col-md-1"><button class="btn btn-outline-primary w-100" type="submit">Add</button></div>
         </div>
       </form>
 
@@ -114,19 +114,19 @@
       <!-- Dice Roller Section -->
       <div class="my-4 text-light">
         <div class="d-flex justify-content-center gap-2 flex-wrap">
-          <button class="btn btn-secondary dice-btn" data-dice="4">Roll d4</button>
-          <button class="btn btn-secondary dice-btn" data-dice="6">Roll d6</button>
-          <button class="btn btn-secondary dice-btn" data-dice="8">Roll d8</button>
-          <button class="btn btn-secondary dice-btn" data-dice="10">Roll d10</button>
-          <button class="btn btn-secondary dice-btn" data-dice="12">Roll d12</button>
-          <button class="btn btn-secondary dice-btn" data-dice="20">Roll d20</button>
-          <button class="btn btn-secondary dice-btn" data-dice="100">Roll d100</button>
+          <button class="btn btn-outline-secondary dice-btn" data-dice="4">Roll d4</button>
+          <button class="btn btn-outline-secondary dice-btn" data-dice="6">Roll d6</button>
+          <button class="btn btn-outline-secondary dice-btn" data-dice="8">Roll d8</button>
+          <button class="btn btn-outline-secondary dice-btn" data-dice="10">Roll d10</button>
+          <button class="btn btn-outline-secondary dice-btn" data-dice="12">Roll d12</button>
+          <button class="btn btn-outline-secondary dice-btn" data-dice="20">Roll d20</button>
+          <button class="btn btn-outline-secondary dice-btn" data-dice="100">Roll d100</button>
         </div>
         <div class="mt-3">
           <label for="custom-dice-input" class="form-label">Custom Roll:</label>
           <div class="input-group w-auto mx-auto">
             <input id="custom-dice-input" type="text" class="form-control form-control-sm" placeholder="e.g. 2d6+3">
-            <button id="roll-custom-dice" class="btn btn-warning btn-sm">Roll</button>
+            <button id="roll-custom-dice" class="btn btn-outline-warning btn-sm">Roll</button>
           </div>
         </div>
         <div class="text-light mt-2" id="dice-result" style="font-size: 1.25rem;"></div>
@@ -164,9 +164,9 @@
       <div id="mobile-initiative-order" class="d-block d-md-none"></div>
 
       <div class="mt-3 d-flex gap-2 justify-content-center flex-wrap">
-        <button id="next-turn" class="btn btn-success">Next Turn</button>
-        <button id="reset-turns" class="btn btn-danger">Reset Rounds</button>
-        <button id="clear-all" class="btn btn-outline-danger">Clear All</button>
+        <button id="next-turn" class="btn btn-outline-success">Next Turn</button>
+        <button id="reset-turns" class="btn btn-outline-danger">Reset Rounds</button>
+        <button id="clear-all" class="btn btn-outline-outline-danger">Clear All</button>
         <button id="clear-storage" class="btn btn-outline-warning">Clear Saved Data</button>
       </div>
     </div>
