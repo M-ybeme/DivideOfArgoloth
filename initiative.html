@@ -82,21 +82,46 @@
     <div class="container-fluid text-center backdrop">
       <h1 class="display-1 mb-0">Initiative Tracker</h1>
       <p class="lead">Manage initiative, health, AC, notes, dice rolls, and combat rounds.</p>
-      <div class="d-flex justify-content-center align-items-center gap-3 my-3 flex-wrap">
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="autoSaveToggle" checked>
-          <label class="form-check-label" for="autoSaveToggle">Auto-Save</label>
+      <div class="row">
+        <div class="col-6">
+            <div class="d-flex justify-content-center align-items-center gap-3 my-3 flex-wrap">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="autoSaveToggle" checked>
+                <label class="form-check-label" for="autoSaveToggle">Auto-Save</label>
+              </div>
+              <button id="manualSaveBtn" class="btn btn-outline-success">Manual Save</button>
+              <select id="saveHistorySelect" class="form-select form-select-sm w-auto">
+                <option disabled selected>Load Previous Save</option>
+              </select>
+              <input type="file" id="import-file" accept=".json" class="d-none" />
+              <button id="export-btn" class="btn btn-outline-warning">Export Session</button>
+              <button id="import-btn" class="btn btn-outline-secondary">Import Session</button>
+            </div>
         </div>
-        <button id="manualSaveBtn" class="btn btn-outline-primary text-primary">Manual Save</button>
-        <select id="saveHistorySelect" class="form-select form-select-sm w-auto">
-          <option disabled selected>Load Previous Save</option>
-        </select>
+        <div class="col-6">
+          <div class="accordion mb-4" id="savedCharactersAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="savedCharactersHeading">
+                <button class="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#savedCharactersCollapse" aria-expanded="false" aria-controls="savedCharactersCollapse">
+                  Saved Character Stat Blocks (Max: 10)
+                </button>
+              </h2>
+              <div id="savedCharactersCollapse" class="accordion-collapse collapse" aria-labelledby="savedCharactersHeading" data-bs-parent="#savedCharactersAccordion">
+                <div class="accordion-body bg-dark text-light">
+                  <div class="row g-2 mb-3">
+                    <div class="col-md-3"><input id="save-name" class="form-control" type="text" placeholder="Name" /></div>
+                    <div class="col-md-2"><input id="save-health" class="form-control" type="number" placeholder="HP" /></div>
+                    <div class="col-md-2"><input id="save-ac" class="form-control" type="number" placeholder="AC" /></div>
+                    <div class="col-md-2"><button id="save-character-btn" class="btn btn-outline-success w-100">Save Character</button></div>
+                  </div>
+                  <ul id="saved-characters-list" class="list-group"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="d-flex justify-content-center align-items-center gap-3 my-3 flex-wrap">
-        <input type="file" id="import-file" accept=".json" class="d-none" />
-        <button id="export-btn" class="btn btn-outline-warning">Export Session</button>
-        <button id="import-btn" class="btn btn-outline-secondary">Import Session</button>
-      </div>
+      
 
       <form id="initiative-form" class="mb-4">
         <div class="row g-2">
@@ -105,7 +130,7 @@
           <div class="col-md-2"><input id="character-health" class="form-control" type="number" placeholder="Max HP" required></div>
           <div class="col-md-2"><input id="character-ac" class="form-control" type="number" placeholder="AC" required></div>
           <div class="col-md-2"><input id="character-notes" class="form-control" type="text" placeholder="Notes (optional)"></div>
-          <div class="col-md-1"><button class="btn btn-outline-primary w-100 text-primary" type="submit">Add</button></div>
+          <div class="col-md-1"><button class="btn btn-outline-success w-100" type="submit">Add</button></div>
         </div>
       </form>
 
@@ -114,13 +139,13 @@
       <!-- Dice Roller Section -->
       <div class="my-4 text-light">
         <div class="d-flex justify-content-center gap-2 flex-wrap">
-          <button class="btn btn-outline-secondary dice-btn" data-dice="4">Roll d4</button>
-          <button class="btn btn-outline-secondary dice-btn" data-dice="6">Roll d6</button>
-          <button class="btn btn-outline-secondary dice-btn" data-dice="8">Roll d8</button>
-          <button class="btn btn-outline-secondary dice-btn" data-dice="10">Roll d10</button>
-          <button class="btn btn-outline-secondary dice-btn" data-dice="12">Roll d12</button>
-          <button class="btn btn-outline-secondary dice-btn" data-dice="20">Roll d20</button>
-          <button class="btn btn-outline-secondary dice-btn" data-dice="100">Roll d100</button>
+          <button class="btn btn-outline-info dice-btn" data-dice="4">Roll d4</button>
+          <button class="btn btn-outline-info dice-btn" data-dice="6">Roll d6</button>
+          <button class="btn btn-outline-info dice-btn" data-dice="8">Roll d8</button>
+          <button class="btn btn-outline-info dice-btn" data-dice="10">Roll d10</button>
+          <button class="btn btn-outline-info dice-btn" data-dice="12">Roll d12</button>
+          <button class="btn btn-outline-info dice-btn" data-dice="20">Roll d20</button>
+          <button class="btn btn-outline-info dice-btn" data-dice="100">Roll d100</button>
         </div>
         <div class="mt-3">
           <label for="custom-dice-input" class="form-label">Custom Roll:</label>
@@ -166,7 +191,7 @@
       <div class="mt-3 d-flex gap-2 justify-content-center flex-wrap">
         <button id="next-turn" class="btn btn-outline-success">Next Turn</button>
         <button id="reset-turns" class="btn btn-outline-danger">Reset Rounds</button>
-        <button id="clear-all" class="btn btn-outline-outline-danger">Clear All</button>
+        <button id="clear-all" class="btn btn-outline-light">Clear All</button>
         <button id="clear-storage" class="btn btn-outline-warning">Clear Saved Data</button>
       </div>
     </div>
@@ -565,6 +590,72 @@
         this.value = ''; // Reset file input
         });
     });
+
+    let savedCharacters = JSON.parse(localStorage.getItem('savedCharacters') || '[]');
+
+    function buildSavedCharactersList() {
+      const list = document.getElementById('saved-characters-list');
+      list.innerHTML = '';
+    
+      savedCharacters.forEach((char, index) => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center bg-dark text-light border-light';
+        li.innerHTML = `
+          <span><strong>${char.name}</strong> - HP: ${char.health}, AC: ${char.ac}</span>
+          <div>
+            <button class="btn btn-sm btn-outline-success me-2" data-load-index="${index}">Load</button>
+            <button class="btn btn-sm btn-outline-danger" data-index="${index}">Delete</button>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+    
+      list.querySelectorAll('button[data-index]').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const i = parseInt(this.dataset.index);
+          savedCharacters.splice(i, 1);
+          localStorage.setItem('savedCharacters', JSON.stringify(savedCharacters));
+          buildSavedCharactersList();
+        });
+      });
+    
+      list.querySelectorAll('button[data-load-index]').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const i = parseInt(this.dataset.loadIndex);
+          const char = savedCharacters[i];
+          document.getElementById('character-name').value = char.name;
+          document.getElementById('character-health').value = char.health;
+          document.getElementById('character-ac').value = char.ac;
+        });
+      });
+    }
+
+    document.getElementById('save-character-btn').addEventListener('click', () => {
+      const name = document.getElementById('save-name').value.trim();
+      const health = parseInt(document.getElementById('save-health').value);
+      const ac = parseInt(document.getElementById('save-ac').value);
+    
+      if (!name || isNaN(health) || isNaN(ac)) {
+        alert("Please enter valid Name, Health, and AC.");
+        return;
+      }
+    
+      if (savedCharacters.length >= 10) {
+        alert("You can only save up to 10 characters.");
+        return;
+      }
+    
+      savedCharacters.push({ name, health, ac });
+      localStorage.setItem('savedCharacters', JSON.stringify(savedCharacters));
+      buildSavedCharactersList();
+    
+      document.getElementById('save-name').value = '';
+      document.getElementById('save-health').value = '';
+      document.getElementById('save-ac').value = '';
+    });
+
+    // Call this in DOMContentLoaded block
+    buildSavedCharactersList();
   </script>
 </body>
 </html>
